@@ -16,6 +16,9 @@ TOKEN_MAPPING = {
     "k9p": "adinda",
     "z3x": "farah",
     "6xd": "kamasa",
+    "7ds": "gadiza",
+    "9eh": "arya",
+    "0sn": "andre",
     "m5q": "annisa"
 }
 
