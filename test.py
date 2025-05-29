@@ -15,7 +15,7 @@ TOKEN_MAPPING = {
     "7c2": "meldi",
     "k9p": "adinda",
     "z3x": "farah",
-    "6xd": "kamasa",
+    "6CD": "kamasa",
     "7ds": "gadiza",
     "9eh": "arya",
     "0sn": "andre",
@@ -168,7 +168,7 @@ def main():
 
     if st.session_state.app_step == "splash_screen":
         st.session_state.audio_js_injected = False
-        token_dari_url_list = query_params.get("l", [])
+        token_dari_url_list = query_params.get("L", [])
         token_dari_url = token_dari_url_list if token_dari_url_list else None # Ambil elemen pertama jika ada
 
         col1, col2, col3 = st.columns([1, 1.2, 1])
