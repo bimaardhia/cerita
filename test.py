@@ -3,28 +3,25 @@ import os
 from pathlib import Path
 import base64
 
-# --- KONFIGURASI APLIKASI ---
+# --- KONFIGURASI APLIKASI --- (Salin dari kode Anda)
 NAMA_FOLDER_MEDIA_UTAMA = "media"
 EKSTENSI_GAMBAR_DIDUKUNG = ('.jpg', '.jpeg', '.png', '.gif', '.webp')
 EKSTENSI_VIDEO_DIDUKUNG = ('.mp4', '.mov', '.avi', '.mkv')
 JUMLAH_KOLOM_GRID = 3
-NAMA_FILE_MUSIK_LATAR = "everything u are.mp3" # Pastikan file ini ada di folder media
+NAMA_FILE_MUSIK_LATAR = "everything u are.mp3"
 
 TOKEN_MAPPING = {
     "a1b": "clea",
     "7c2": "meldi",
     "k9p": "adinda",
     "z3x": "farah",
-    "6CD": "kamasa",
+    "6xd": "kamasa",
     "7ds": "gadiza",
     "9eh": "arya",
     "0sn": "andre",
     "m5q": "annisa"
 }
 
-# --- KONFIGURASI PESAN UNTUK TEMAN ---
-# Tambahkan pesan spesifik untuk setiap nama folder teman di sini.
-# Kunci dictionary harus sama dengan nilai yang ada di TOKEN_MAPPING.
 PESAN_UNTUK_TEMAN = {
     "clea": """
 Hai Clea yang paling kusayang,
@@ -35,38 +32,22 @@ Semoga kamu suka yaa. Jangan bosen-bosen jadi temen aku! hehe.
 
 Dari aku, yang selalu ada buat kamu.
     """,
-    "rand": """
-Woy Rand, Bro!
+    "kamasa": """
+    Hai Kamasa!
 
-Gimana kabarnya? Sehat kan? Harus sehat dong!
-Nih, gw bikinin sesuatu yang simpel tapi semoga berkesan. Kumpulan foto-foto kita dari zaman baheula sampe sekarang.
-Liat-liat aja, siapa tau inget lagi momen-momen konyol kita. Jangan lupa traktirannya kalo udah sukses! Hahaha.
-
-Salam hangat,
-Sobat lo yang paling keren.
+    Ini pesan khusus untukmu. Semoga harimu menyenangkan!
+    Cek galeri ini ya!
     """,
-    "lks": """
-Untuk LKS yang Teristimewa,
-
-Mungkin kata-kata tak cukup untuk mengungkapkan betapa berartinya dirimu.
-Melalui galeri sederhana ini, aku ingin mengajakmu kembali mengenang setiap tawa, setiap cerita, dan setiap momen yang telah kita ukir bersama.
-Semoga ini bisa menjadi pengingat kecil akan indahnya persahabatan kita.
-Terima kasih telah menjadi bagian dari perjalananku.
-
-Dengan penuh kasih,
-Seseorang yang mengagumimu.
-    """,
+    # Tambahkan pesan lain sesuai TOKEN_MAPPING atau gunakan default
     "default": """
 Hai Kamu yang Spesial,
 
 Ini adalah sedikit kenangan yang berhasil aku kumpulkan dari momen-momen kita.
 Semoga bisa membuatmu tersenyum dan mengenang kembali saat-saat indah itu.
 Nikmati ya!
-    """ # Pesan default jika nama teman tidak ditemukan di atas
+    """
 }
-
-
-# --- FUNGSI BANTU ---
+# --- FUNGSI BANTU --- (Salin dari kode Anda)
 def dapatkan_file_media(path_folder_spesifik):
     """Mendeteksi dan mengembalikan daftar file media dari folder, diurutkan."""
     if not isinstance(path_folder_spesifik, Path):
@@ -112,10 +93,9 @@ def get_audio_b64_and_mimetype(path_file_musik_str):
     except Exception as e:
         return None, None, f"Gagal memproses file musik: {e}"
 
-# --- FUNGSI TAMPILAN GALERI KONTEN ---
+# --- FUNGSI TAMPILAN GALERI KONTEN --- (Salin dari kode Anda)
 def tampilkan_konten_media(nama_folder_teman_valid):
     """Menampilkan semua media (gambar/video) dari folder teman yang valid."""
-    # st.markdown("---") # Pemisah sebelum konten galeri (dipindah ke atas, setelah pesan surat)
     PATH_FOLDER_TEMAN = Path(NAMA_FOLDER_MEDIA_UTAMA) / nama_folder_teman_valid
     file_media, status_error = dapatkan_file_media(PATH_FOLDER_TEMAN)
 
@@ -153,11 +133,42 @@ def tampilkan_konten_media(nama_folder_teman_valid):
     else:
         st.info("Tidak ada file media yang ditemukan di folder ini.")
 
-# --- BAGIAN UTAMA APLIKASI ---
+# --- BAGIAN UTAMA APLIKASI (MODIFIKASI) ---
 def main():
     st.set_page_config(page_title="Kenangan Kita Bersama", layout="wide")
 
     query_params = st.query_params
+
+    # --- DEBUG CODE START ---
+    with st.sidebar: # Menampilkan debug info di sidebar
+        st.subheader("🔧 Debug Info: Query Params")
+        st.write("Isi `st.query_params` mentah:")
+        st.write(query_params)
+
+        # Mencoba mengambil 'l' (lowercase)
+        token_l_value_raw = query_params.get("l")
+        st.write(f"Nilai mentah untuk key 'l': `{token_l_value_raw}` (Tipe: `{type(token_l_value_raw).__name__}`)")
+
+        # Mencoba mengambil 'L' (uppercase)
+        token_L_value_raw = query_params.get("L")
+        st.write(f"Nilai mentah untuk key 'L': `{token_L_value_raw}` (Tipe: `{type(token_L_value_raw).__name__}`)")
+
+        # Memproses nilai token (ambil elemen pertama jika list)
+        actual_token_l = None
+        if isinstance(token_l_value_raw, list):
+            if token_l_value_raw: actual_token_l = token_l_value_raw[0]
+        else:
+            actual_token_l = token_l_value_raw
+
+        actual_token_L = None
+        if isinstance(token_L_value_raw, list):
+            if token_L_value_raw: actual_token_L = token_L_value_raw[0]
+        else:
+            actual_token_L = token_L_value_raw
+        
+        st.write(f"Nilai terproses dari 'l': `{actual_token_l}`")
+        st.write(f"Nilai terproses dari 'L': `{actual_token_L}`")
+    # --- DEBUG CODE END ---
 
     if 'app_step' not in st.session_state:
         st.session_state.app_step = "splash_screen"
@@ -168,55 +179,53 @@ def main():
 
     if st.session_state.app_step == "splash_screen":
         st.session_state.audio_js_injected = False
-        token_dari_url_list = query_params.get("L", [])
-        token_dari_url = token_dari_url_list if token_dari_url_list else None # Ambil elemen pertama jika ada
+        
+        # --- LOGIKA PENGAMBILAN TOKEN YANG DIPERBAIKI ---
+        raw_token_from_url = None
+        if actual_token_L is not None: # Prioritaskan 'L' jika ada (sesuai pengamatan di deploy)
+            raw_token_from_url = actual_token_L
+            with st.sidebar: st.info("Menggunakan token dari key 'L'.")
+        elif actual_token_l is not None: # Jika 'L' tidak ada, coba 'l'
+            raw_token_from_url = actual_token_l
+            with st.sidebar: st.info("Menggunakan token dari key 'l'.")
+        else:
+            with st.sidebar: st.warning("Token tidak ditemukan di URL (baik 'l' maupun 'L').")
+
+        token_untuk_lookup = None
+        if raw_token_from_url:
+            token_untuk_lookup = raw_token_from_url.lower() # Konversi ke lowercase untuk pencocokan
+        
+        with st.sidebar:
+            st.subheader("🔧 Token Diproses")
+            st.write(f"Token mentah dari URL: `{raw_token_from_url if raw_token_from_url else 'Tidak Ada'}`")
+            st.write(f"Token untuk lookup (lowercase): `{token_untuk_lookup if token_untuk_lookup else 'Tidak Ada'}`")
+        # --- AKHIR LOGIKA PENGAMBILAN TOKEN ---
 
         col1, col2, col3 = st.columns([1, 1.2, 1])
         with col2:
             st.markdown("<br>"*8, unsafe_allow_html=True)
-            # CSS untuk tombol bisa disederhanakan atau dipindah ke fungsi/variabel terpisah jika kompleks
             st.markdown("""
             <style>
-                div.stButton > button {
-                    display: block;
-                    width: 100%;
-                    padding: 1rem 1.5rem;
-                    font-size: 1.25rem;
-                    font-weight: bold;
-                    color: white;
-                    background: linear-gradient(to right, #ff7e5f, #feb47b);
-                    border: none;
-                    border-radius: 10px;
-                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-                    transition: all 0.3s ease;
-                    cursor: pointer;
-                }
-                div.stButton > button:hover {
-                    background: linear-gradient(to right, #feb47b, #ff7e5f);
-                    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-                    transform: translateY(-2px);
-                }
-                div.stButton > button:active {
-                    transform: translateY(0);
-                    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-                }
+                div.stButton > button { /* CSS Tombol Anda */ } 
             </style>
-            """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True) # Pastikan CSS Anda ada di sini atau pindahkan
 
             if st.button("SIAP KAH GUSYY? ✨", key="tombol_siap_splash"):
-                if token_dari_url and token_dari_url in TOKEN_MAPPING:
-                    st.session_state.nama_folder_teman_valid = TOKEN_MAPPING[token_dari_url]
+                if token_untuk_lookup and token_untuk_lookup in TOKEN_MAPPING:
+                    st.session_state.nama_folder_teman_valid = TOKEN_MAPPING[token_untuk_lookup]
                     st.session_state.app_step = "show_gallery_and_play_music"
                     st.rerun()
                 else:
-                    if token_dari_url:
-                        st.error(f"🚫 LINK '{token_dari_url}' SALAH!")
-                    else:
+                    if raw_token_from_url: # Token ada tapi tidak valid
+                        st.error(f"🚫 LINK dengan kode '{raw_token_from_url}' SALAH atau TIDAK VALID!")
+                        st.info("Pastikan kode di URL (setelah `?l=` atau `?L=`) adalah salah satu dari yang ini (tidak case-sensitive): " + ", ".join(TOKEN_MAPPING.keys()))
+                    else: # Tidak ada token sama sekali di URL
                         st.error("🚫 UDAH GAUSA KEPO AH")
-
+                        st.info("Kamu butuh kode spesial di URL untuk masuk. Contoh: `?l=kodekamu` atau `?L=kodekamu`")
+            
             st.markdown("<br>"*8, unsafe_allow_html=True)
-            if not token_dari_url:
-                st.info("NYARI APA SI??")
+            if not raw_token_from_url: # Jika tidak ada token mentah sama sekali
+                st.info("NYARI APA SI?? (Tips: URL-nya sepertinya kurang kode token, coba tambahkan `?l=kode` atau `?L=kode` di akhir URL)")
 
     elif st.session_state.app_step == "show_gallery_and_play_music":
         nama_folder_teman = st.session_state.nama_folder_teman_valid
@@ -230,30 +239,18 @@ def main():
 
         nama_teman_display = nama_folder_teman.capitalize()
         st.title(f"💌 Sebuah Pesan & Galeri untuk {nama_teman_display} 🎞️")
-        # st.markdown(f"_Momen-momen indah bersamamu, {nama_teman_display}!_") # Subtitle bisa diintegrasikan ke pesan
-
-        # --- MULAI BAGIAN PESAN SURAT ---
-        pesan_spesifik = PESAN_UNTUK_TEMAN.get(nama_folder_teman, PESAN_UNTUK_TEMAN["default"])
         
+        pesan_spesifik = PESAN_UNTUK_TEMAN.get(nama_folder_teman, PESAN_UNTUK_TEMAN["default"])
         st.markdown(
             f"""
-            <div style="
-                border: 1px solid #e0e0e0; 
-                border-radius: 8px; 
-                padding: 20px 25px; 
-                margin-bottom: 25px; 
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-                text-align: left; /* Membuat teks di dalam surat rata kiri */
-            ">
+            <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px 25px; margin-bottom: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: left;">
                 <h4 style="margin-top:0; margin-bottom:10px; ">Untukmu, {nama_teman_display}...</h4>
                 <hr style="border-top: 1px solid #eee; margin-bottom: 15px;">
                 <p style="white-space: pre-wrap; line-height: 1.6; ">{pesan_spesifik}</p>
             </div>
-            """,
-            unsafe_allow_html=True
+            """, unsafe_allow_html=True
         )
-        st.markdown("---") # Garis pemisah sebelum bar musik
-        # --- AKHIR BAGIAN PESAN SURAT ---
+        st.markdown("---")
 
         if not st.session_state.audio_js_injected:
             path_musik_str = str(Path(NAMA_FOLDER_MEDIA_UTAMA) / NAMA_FILE_MUSIK_LATAR)
@@ -263,10 +260,8 @@ def main():
                 st.warning(f"Tidak dapat menyiapkan musik latar: {audio_error}")
             elif audio_b64 and audio_mime_type:
                 start_time_seconds = 0 
-
                 js_code = f"""
-                    <div id="audioPlayerDiv" style="width: 100%; text-align: center; margin-bottom: 15px; margin-top: 10px;">
-                    </div>
+                    <div id="audioPlayerDiv" style="width: 100%; text-align: center; margin-bottom: 15px; margin-top: 10px;"></div>
                     <script>
                         if (!document.getElementById('customAudioPlayer')) {{
                             const audioData = "data:{audio_mime_type};base64,{audio_b64}";
@@ -277,12 +272,9 @@ def main():
                             audioElement.controls = true; 
                             audioElement.loop = true;   
                             audioElement.style.width = "80%"; 
-
                             audioContainer.appendChild(audioElement);
-
                             audioElement.onloadedmetadata = function() {{
                                 audioElement.currentTime = {start_time_seconds};
-                                console.log("Audio metadata loaded. currentTime set to {start_time_seconds} seconds.");
                                 const playPromise = audioElement.play();
                                 if (playPromise !== undefined) {{
                                     playPromise.then(_ => {{
@@ -295,10 +287,9 @@ def main():
                         }}
                     </script>
                 """
-                st.components.v1.html(js_code, height=65) # Sesuaikan tinggi jika perlu
+                st.components.v1.html(js_code, height=65)
             st.session_state.audio_js_injected = True
         
-        # st.markdown("---") # Pemisah setelah musik, sebelum galeri
         tampilkan_konten_media(nama_folder_teman)
 
     else:
