@@ -10,11 +10,23 @@ EKSTENSI_VIDEO_DIDUKUNG = ('.mp4', '.mov', '.avi', '.mkv')
 JUMLAH_KOLOM_GRID_DEFAULT = 3
 NAMA_FILE_MUSIK_LATAR = "everything u are.mp3"
 
-TOKEN_MAPPING = {
-    "a1b": "Clea", "7c2": "Meldi", "k9p": "Adinda", "z3x": "Farah",
-    "6xd": "Kamasa", "7ds": "Gadiza", "9eh": "Arya", "0sn": "Andre",
-    "m5q": "Annisa"
-}
+# --- MEMUAT TOKEN_MAPPING DARI STREAMLIT SECRETS ---
+try:
+    # Mengakses tabel 'token_data' dari secrets.
+    # st.secrets.token_data akan menjadi objek yang mirip dictionary.
+    # Kita konversi ke dictionary Python murni dengan dict().
+    TOKEN_MAPPING = dict(st.secrets.token_data) # Perhatikan 'token_data' di sini
+
+    if not TOKEN_MAPPING: # Jika tabel ada tapi isinya kosong
+        st.error("Konfigurasi 'token_data' di Streamlit Secrets ditemukan kosong. Harap periksa file .streamlit/secrets.toml atau pengaturan secrets di platform deployment Anda.")
+        TOKEN_MAPPING = {} # Fallback penting
+except AttributeError:
+    # Jika 'token_data' tidak ditemukan sama sekali di st.secrets
+    st.error("Konfigurasi 'token_data' tidak ditemukan di Streamlit Secrets. Pastikan tabel [token_data] ada di .streamlit/secrets.toml atau di pengaturan secrets platform deployment.")
+    TOKEN_MAPPING = {} # Fallback penting
+except Exception as e:
+    st.error(f"Terjadi kesalahan saat memuat TOKEN_MAPPING dari Streamlit Secrets: {e}")
+    TOKEN_MAPPING = {} # Fallback penting
 
 PESAN_UNTUK_TEMAN = {
     "Clea": """
