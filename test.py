@@ -96,6 +96,48 @@ def get_audio_b64_and_mimetype(path_file_musik_str):
 # --- FUNGSI TAMPILAN GALERI KONTEN --- (Salin dari kode Anda)
 def tampilkan_konten_media(nama_folder_teman_valid):
     """Menampilkan semua media (gambar/video) dari folder teman yang valid."""
+    
+    # --- AWAL KODE DEBUG PATH DETAIL ---
+    # Pastikan NAMA_FOLDER_MEDIA_UTAMA sudah didefinisikan secara global atau di-pass ke fungsi ini
+    # Untuk contoh ini, saya asumsikan NAMA_FOLDER_MEDIA_UTAMA adalah variabel global
+    
+    script_dir = Path(__file__).parent.resolve() # Direktori tempat script .py Anda berada
+    with st.sidebar:
+        st.markdown("---")
+        st.subheader(f"🔧 Debug Path untuk: '{nama_folder_teman_valid}'")
+        st.write(f"Direktori script: `{script_dir}`")
+        st.write(f"Nama folder media utama (konfigurasi): `{NAMA_FOLDER_MEDIA_UTAMA}`")
+
+        # Path absolut yang coba dibangun ke folder media utama
+        abs_path_media_utama = script_dir / NAMA_FOLDER_MEDIA_UTAMA
+        st.write(f"Path absolut target ke folder media utama: `{abs_path_media_utama}`")
+
+        # Path absolut yang coba dibangun ke folder teman spesifik
+        abs_path_folder_teman = abs_path_media_utama / nama_folder_teman_valid
+        st.write(f"Path absolut target ke folder teman: `{abs_path_folder_teman}`")
+
+        st.markdown("**Pengecekan Eksistensi Folder:**")
+        if abs_path_media_utama.exists() and abs_path_media_utama.is_dir():
+            st.success(f"✅ Folder media utama ('{NAMA_FOLDER_MEDIA_UTAMA}') DITEMUKAN di `{abs_path_media_utama}`.")
+            try:
+                st.write(f"Isi dari '{abs_path_media_utama}': `{os.listdir(abs_path_media_utama)}`")
+                
+                # Sekarang cek subfolder teman
+                if abs_path_folder_teman.exists() and abs_path_folder_teman.is_dir():
+                    st.success(f"✅ Folder teman ('{nama_folder_teman_valid}') DITEMUKAN di `{abs_path_folder_teman}`.")
+                    try:
+                        st.write(f"Isi dari '{abs_path_folder_teman}': `{os.listdir(abs_path_folder_teman)}`")
+                    except Exception as e:
+                        st.error(f"⚠️ Gagal membaca isi folder teman '{nama_folder_teman_valid}': {e}")
+                else:
+                    st.error(f"❌ Folder teman ('{nama_folder_teman_valid}') TIDAK DITEMUKAN di `{abs_path_folder_teman}`.")
+            except Exception as e:
+                st.error(f"⚠️ Gagal membaca isi folder media utama: {e}")
+        else:
+            st.error(f"❌ Folder media utama ('{NAMA_FOLDER_MEDIA_UTAMA}') TIDAK DITEMUKAN atau bukan direktori di `{abs_path_media_utama}`.")
+        st.markdown("---")
+    # --- AKHIR KODE DEBUG PATH DETAIL ---
+    
     PATH_FOLDER_TEMAN = Path(NAMA_FOLDER_MEDIA_UTAMA) / nama_folder_teman_valid
     file_media, status_error = dapatkan_file_media(PATH_FOLDER_TEMAN)
 
@@ -138,6 +180,8 @@ def main():
     st.set_page_config(page_title="Kenangan Kita Bersama", layout="wide")
 
     query_params = st.query_params
+    
+    
 
     # --- DEBUG CODE START ---
     with st.sidebar: # Menampilkan debug info di sidebar
