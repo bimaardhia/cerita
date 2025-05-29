@@ -11,15 +11,15 @@ JUMLAH_KOLOM_GRID = 3
 NAMA_FILE_MUSIK_LATAR = "everything u are.mp3"
 
 TOKEN_MAPPING = {
-    "a1b": "clea",
-    "7c2": "meldi",
-    "k9p": "adinda",
-    "z3x": "farah",
-    "6xd": "kamasa",
-    "7ds": "gadiza",
-    "9eh": "arya",
-    "0sn": "andre",
-    "m5q": "annisa"
+    "a1b": "Clea",  # Ubah dari "clea"
+    "7c2": "Meldi", # Ubah dari "meldi"
+    "k9p": "Adinda",# Ubah dari "adinda"
+    "z3x": "Farah", # Ubah dari "farah"
+    "6xd": "Kamasa",# Ubah dari "kamasa"
+    "7ds": "Gadiza",# Ubah dari "gadiza"
+    "9eh": "Arya",  # Ubah dari "arya"
+    "0sn": "Andre", # Ubah dari "andre"
+    "m5q": "Annisa" # Ubah dari "annisa"
 }
 
 PESAN_UNTUK_TEMAN = {
