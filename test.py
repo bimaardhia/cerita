@@ -58,7 +58,7 @@ def dapatkan_file_media(path_folder_spesifik):
     ]
     if not file_media_list:
         return [], "error_tidak_ada_file_visual"
-    file_media_list.sort(key=lambda x: x.name, reverse=False)
+    file_media_list.sort(key=lambda x: x.name, reverse=True)
     return file_media_list, None
 
 # --- FUNGSI TAMPILAN GALERI KONTEN ---
@@ -103,6 +103,54 @@ def tampilkan_konten_media(nama_folder_teman_valid, jumlah_kolom_untuk_tampilan)
 # --- BAGIAN UTAMA APLIKASI ---
 def main():
     st.set_page_config(page_title="Kenangan Kita Bersama", layout="wide")
+    
+    css_lengkap = """
+        <style>
+            /* Sembunyikan elemen UI Streamlit default */
+            #MainMenu {visibility: hidden;}
+            div[data-testid="stMainMenu"] {visibility: hidden;}
+            
+            footer {visibility: hidden;}
+            
+            header[data-testid="stHeader"] {visibility: hidden;} /* Untuk Streamlit versi lama */
+            div[data-testid="stHeader"] {visibility: hidden;} /* Untuk Streamlit versi lebih baru */
+
+            /* Menghilangkan padding atas yang biasanya dibuat oleh header yang disembunyikan */
+            .main .block-container { 
+                padding-top: 1rem; 
+                padding-bottom: 1rem;
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            /* CSS Tombol Splash Screen */
+            div.stButton > button {
+                display: block;
+                width: 100%;
+                padding: 1rem 1.5rem;
+                font-size: 1.25rem;
+                font-weight: bold;
+                color: white;
+                background: linear-gradient(to right, #ff7e5f, #feb47b); /* Warna Gradasi Orange-Peach */
+                border: none;
+                border-radius: 12px; /* Sedikit lebih bulat */
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.3s ease-in-out;
+                cursor: pointer;
+            }
+            div.stButton > button:hover {
+                background: linear-gradient(to right, #feb47b, #ff7e5f); /* Gradasi dibalik saat hover */
+                box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+                transform: translateY(-3px); /* Efek mengangkat sedikit */
+            }
+            div.stButton > button:active {
+                transform: translateY(0);
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            }
+
+        </style>
+    """
+    st.markdown(css_lengkap, unsafe_allow_html=True)
 
     # --- Deteksi Tipe Perangkat (PC atau Bukan) ---
     if 'device_type_determined' not in st.session_state:
@@ -161,7 +209,7 @@ def main():
             raw_token_from_url = actual_token_L if actual_token_L is not None else actual_token_l
             token_untuk_lookup = raw_token_from_url.lower() if raw_token_from_url else None
 
-            if st.button("SIAP KAH GUSYY? ✨", key="tombol_siap_splash"):
+            if st.button("SIAP KAH GUSYY? ✨ *penceten rek", key="tombol_siap_splash"):
                 if token_untuk_lookup and token_untuk_lookup in TOKEN_MAPPING:
                     st.session_state.nama_folder_teman_valid = TOKEN_MAPPING[token_untuk_lookup]
                     st.session_state.app_step = "show_gallery_and_play_music"
@@ -189,10 +237,20 @@ def main():
         nama_teman_display = nama_folder_teman
         st.title(f"💌 Pesan & Galeri untuk {nama_teman_display} 🎞️")
         
+        # Ambil pesan berdasarkan nama_folder_teman ("Kamasa", "Clea", dll.)
         pesan_spesifik = PESAN_UNTUK_TEMAN.get(nama_folder_teman, PESAN_UNTUK_TEMAN["default"])
-        # ... (kode markdown pesan Anda) ...
-        st.markdown( f"""<div style="..."> {pesan_spesifik} </div>""", unsafe_allow_html=True)
-        st.markdown("---")
+        # Pastikan CSS pesan Anda sudah benar di sini
+        st.markdown(
+            f"""
+            <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px 25px; 
+                        margin-bottom: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: left;">
+                <h4 style="margin-top:0; margin-bottom:10px; ">Untukmu, {nama_teman_display}...</h4>
+                <hr style="border-top: 1px solid #eee; margin-bottom: 15px;">
+                <p style="white-space: pre-wrap; line-height: 1.6; ">{pesan_spesifik}</p>
+            </div>
+            """, unsafe_allow_html=True
+        )
+        st.markdown("---") # Pemisah sebelum audio
 
         if not st.session_state.audio_player_rendered:
             path_musik_str = str(script_dir / NAMA_FOLDER_MEDIA_UTAMA / NAMA_FILE_MUSIK_LATAR)
@@ -218,16 +276,6 @@ def main():
             jumlah_kolom_galeri = 1
             # st.sidebar.info(f"Layout: Non-PC ({jumlah_kolom_galeri} kolom)") # Untuk debug
         
-        with st.sidebar: # Menampilkan info deteksi di sidebar
-            st.markdown("---")
-            st.subheader("ℹ️ Info Perangkat")
-            if st.session_state.device_type_determined:
-                device_info = "PC" if is_pc else "Non-PC (Mobile/Tablet)"
-                st.write(f"Tipe Perangkat Terdeteksi: **{device_info}**")
-                st.write(f"Jumlah Kolom Galeri: **{jumlah_kolom_galeri}**")
-            else:
-                st.write("Tipe perangkat belum terdeteksi sepenuhnya (mungkin run awal).")
-
 
         tampilkan_konten_media(nama_folder_teman, jumlah_kolom_galeri)
 
