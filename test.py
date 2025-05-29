@@ -1,5 +1,4 @@
 import streamlit as st
-import os
 from pathlib import Path
 from streamlit_javascript import st_javascript # Tambahkan ini
 from user_agents import parse # Tambahkan ini
@@ -200,7 +199,7 @@ def main():
             try:
                 with open(path_musik_str, "rb") as audio_file:
                     audio_bytes = audio_file.read()
-                st.audio(audio_bytes, format='audio/mpeg', start_time=0, autoplay=True)
+                st.audio(audio_bytes, format='audio/mpeg', start_time=0, autoplay=True, loop=True)
                 st.session_state.audio_player_rendered = True
             except FileNotFoundError:
                 st.error(f"PY: File musik '{NAMA_FILE_MUSIK_LATAR}' TIDAK DITEMUKAN.")
