@@ -299,6 +299,20 @@ def main():
         if not st.session_state.audio_js_injected:
             path_musik_str = str(Path(NAMA_FOLDER_MEDIA_UTAMA) / NAMA_FILE_MUSIK_LATAR)
             audio_b64, audio_mime_type, audio_error = get_audio_b64_and_mimetype(path_musik_str)
+            
+            # --- DEBUG AUDIO START ---
+            with st.sidebar:
+                st.markdown("---") # Pemisah tambahan di sidebar
+                st.subheader("🎵 Debug Info Audio")
+                st.write(f"Path musik yang dicoba: `{path_musik_str}`")
+                st.write(f"Error saat memproses audio: `{audio_error}`")
+                st.write(f"MIME Type terdeteksi: `{audio_mime_type}`")
+                if audio_b64:
+                    st.write(f"Panjang data Audio B64: {len(audio_b64)}")
+                else:
+                    st.write("Data Audio B64: Kosong/Tidak ada")
+                st.markdown("---") # Pemisah tambahan di sidebar
+            # --- DEBUG AUDIO END ---
 
             if audio_error:
                 st.warning(f"Tidak dapat menyiapkan musik latar: {audio_error}")
