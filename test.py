@@ -255,7 +255,7 @@ def main():
             f"""
             <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px 25px; 
                         margin-bottom: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: left;">
-                <h4 style="margin-top:0; margin-bottom:10px; ">Untukmu, {nama_teman_display}...</h4>
+                <h4 style="margin-top:0; margin-bottom:10px; ">Haiii, {nama_teman_display}...</h4>
                 <hr style="border-top: 1px solid #eee; margin-bottom: 15px;">
                 <p style="white-space: pre-wrap; line-height: 1.6; ">{pesan_spesifik}</p>
             </div>
