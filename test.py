@@ -28,32 +28,31 @@ except Exception as e:
     st.error(f"Terjadi kesalahan saat memuat TOKEN_MAPPING dari Streamlit Secrets: {e}")
     TOKEN_MAPPING = {} # Fallback penting
 
-PESAN_UNTUK_TEMAN = {
-    "Clea": """
-Hai Clea yang paling kusayang,
-Apa kabarnya hari ini? Semoga selalu ceria dan bahagia ya, seperti biasanya kamu membawa keceriaan buat aku.
-Aku bikin galeri kecil ini khusus buat kamu. Isinya mungkin nggak seberapa, tapi setiap fotonya menyimpan cerita dan kenangan kita yang nggak akan pernah aku lupa.
-Semoga kamu suka yaa. Jangan bosen-bosen jadi temen aku! hehe.
-Dari aku, yang selalu ada buat kamu.
-    """,
-    "Kamasa": """
-    Hai Kamasa yang hebat!
-    Ini adalah sedikit lembaran kenangan yang aku rangkai khusus buat kamu.
-    Setiap momen bersamamu itu berharga, dan aku berharap galeri kecil ini bisa jadi pengingat betapa serunya pertemanan kita.
-    Jangan pernah berubah ya, tetap jadi Kamasa yang aku kenal. Cheers!
-    Sahabatmu.
-    """,
-    "Meldi": "Pesan untuk Meldi...", "Adinda": "Pesan untuk Adinda...",
-    "Farah": "Pesan untuk Farah...", "Gadiza": "Pesan untuk Gadiza...",
-    "Arya": "Pesan untuk Arya...", "Andre": "Pesan untuk Andre...",
-    "Annisa": "Pesan untuk Annisa...",
-    "default": """
-Hai Kamu yang Spesial,
+# --- MEMUAT PESAN_UNTUK_TEMAN DARI STREAMLIT SECRETS ---
+# Pesan default jika terjadi error atau secret tidak ditemukan
+FALLBACK_DEFAULT_MESSAGE = """
+Hai Kamu yang Spesial dari Fallback,
 Ini adalah sedikit kenangan yang berhasil aku kumpulkan dari momen-momen kita.
 Semoga bisa membuatmu tersenyum dan mengenang kembali saat-saat indah itu.
 Nikmati ya!
-    """
-}
+"""
+try:
+    # Menggunakan 'pesan_untuk_sahabat' sebagai nama tabel di secrets.toml
+    PESAN_UNTUK_TEMAN = dict(st.secrets.pesan_untuk_sahabat)
+    if not PESAN_UNTUK_TEMAN:
+        st.warning("Konfigurasi 'pesan_untuk_sahabat' di Streamlit Secrets kosong. Pesan mungkin tidak tampil dengan benar.")
+        # Jika tabel pesan kosong, pastikan setidaknya ada 'default'
+        PESAN_UNTUK_TEMAN = {"default": FALLBACK_DEFAULT_MESSAGE}
+    # Pastikan ada kunci 'default' setelah memuat, jika tidak ada dari secrets, tambahkan dari fallback
+    if "default" not in PESAN_UNTUK_TEMAN:
+        PESAN_UNTUK_TEMAN["default"] = FALLBACK_DEFAULT_MESSAGE
+
+except AttributeError:
+    st.warning("Konfigurasi 'pesan_untuk_sahabat' tidak ditemukan di Streamlit Secrets. Menggunakan pesan default.")
+    PESAN_UNTUK_TEMAN = {"default": FALLBACK_DEFAULT_MESSAGE} # Hanya ada default jika tabelnya tidak ada
+except Exception as e:
+    st.error(f"Terjadi kesalahan saat memuat PESAN_UNTUK_TEMAN dari Streamlit Secrets: {e}. Menggunakan pesan default.")
+    PESAN_UNTUK_TEMAN = {"default": FALLBACK_DEFAULT_MESSAGE}
 
 # --- FUNGSI BANTU ---
 def dapatkan_file_media(path_folder_spesifik):
