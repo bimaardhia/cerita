@@ -251,7 +251,7 @@ def main():
         # Ambil pesan berdasarkan nama_folder_teman ("Kamasa", "Clea", dll.)
         pesan_spesifik = PESAN_UNTUK_TEMAN.get(nama_folder_teman, PESAN_UNTUK_TEMAN["default"])
         # Pastikan CSS pesan Anda sudah benar di sini
-        st.markdown(
+        st.markdown( 
             f"""
             <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px 25px; 
                         margin-bottom: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: left;">
